@@ -12,6 +12,7 @@
 #include "mango/dispatch/bind.h"
 #include "mango/draw/text-node.h"
 #include "mango/ext-protocol/ext-workspace.h"
+#include "mango/ext-protocol/fifo.h"
 #include "mango/ext-protocol/foreign-toplevel.h"
 #include "mango/ext-protocol/hdr.h"
 #include "mango/ext-protocol/tearing.h"
@@ -637,6 +638,11 @@ void setup(void) {
 	wlr_alpha_modifier_v1_create(server.display);
 	wlr_ext_data_control_manager_v1_create(server.display, 1);
 	wlr_fixes_create(server.display, 1);
+
+	server.fifo_manager = mango_fifo_manager_v1_create(server.display);
+	if (!server.fifo_manager) {
+		die("couldn't create FIFO manager");
+	}
 
 	wl_signal_init(&server.print_status_signal);
 	wl_signal_add(&server.print_status_signal, &server.print_status_listener);

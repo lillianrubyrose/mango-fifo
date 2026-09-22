@@ -7,6 +7,7 @@
 #include "mango/common/util.h"
 #include "mango/dispatch/bind.h"
 #include "mango/ext-protocol/ext-workspace.h"
+#include "mango/ext-protocol/fifo.h"
 #include "mango/ext-protocol/foreign-toplevel.h"
 #include "mango/ext-protocol/hdr.h"
 #include "mango/ext-protocol/tearing.h"
@@ -1353,7 +1354,9 @@ void handle_output_frame(struct wl_listener *listener, void *data) {
 		monitor_stop_skip_frame_timer(m);
 	}
 
-	mango_scene_output_commit(m->scene_output, &m->pending);
+	if (mango_scene_output_commit(m->scene_output, &m->pending)) {
+		mango_fifo_manager_v1_output_latched(server.fifo_manager, m->wlr_output);
+	}
 
 skip:
 	// Sends frame-done notifications.

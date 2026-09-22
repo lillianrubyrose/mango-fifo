@@ -94,6 +94,7 @@ struct MangoServer {
 
 	/* External protocol managers */
 	struct wlr_foreign_toplevel_manager_v1 *foreign_toplevel_manager;
+	struct mango_fifo_manager_v1 *fifo_manager;
 	struct wlr_tearing_control_manager_v1 *tearing_control;
 	struct wl_listener tearing_new_object_listener;
 	struct wlr_input_method_manager_v2 *input_method_manager;
